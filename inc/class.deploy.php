@@ -185,6 +185,13 @@ abstract class Deploy {
 			// Secure the .git directory
 			echo exec( 'chmod -R og-rx .git' );
 
+			// Fetch submodules if any registred
+			if ( file_exists( '.gitmodules' ) ) {
+				exec( 'git submodule init', $output );
+				exec( 'git submodule update', $output );
+			}
+
+			// Post deploy action callback
 			if ( is_callable( $this->_post_deploy ) )
 				call_user_func( $this->_post_deploy );
 
@@ -192,6 +199,13 @@ abstract class Deploy {
 		} catch ( Exception $e ) {
 			$this->log( $e, 'ERROR' );
 		}
+	}
+
+	private function submodules() {
+			chdir( $this->_path);
+
+			// Discard any changes to tracked files since our last deploy
+			exec( 'git reset --hard HEAD', $output );
 	}
 }
 // Registers all of our repos with the Deploy class
