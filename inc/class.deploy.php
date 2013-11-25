@@ -200,13 +200,6 @@ abstract class Deploy {
 			$this->log( $e, 'ERROR' );
 		}
 	}
-
-	private function submodules() {
-			chdir( $this->_path);
-
-			// Discard any changes to tracked files since our last deploy
-			exec( 'git reset --hard HEAD', $output );
-	}
 }
 // Registers all of our repos with the Deploy class
 foreach ( $repos as $name => $repo )
