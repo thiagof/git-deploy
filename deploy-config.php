@@ -34,6 +34,8 @@ $repos = array(
 	)*/
 );
 
+$debug = true;
+
 /**
  * Sets the deploy log direcotry
  */

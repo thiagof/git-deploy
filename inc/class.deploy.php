@@ -36,6 +36,11 @@ abstract class Deploy {
 	private static $_log_name = 'deployments.log';
 
 	/**
+	* To allow logging of debug information
+	*/
+	public static $log_debug = false;
+
+	/**
 	 * The path to where we wish to store our log file.
 	 */
 	private static $_log_path = DEPLOY_LOG_DIR;
@@ -195,6 +200,9 @@ abstract class Deploy {
 			if ( is_callable( $this->_post_deploy ) )
 				call_user_func( $this->_post_deploy );
 
+			if ( self::$debug )
+				$this->log( '[Debug: ' . json_encode($output) );
+
 			$this->log( '[SHA: ' . $this->_commit . '] Deployment of ' . $this->_name . ' from branch ' . $this->_branch . ' successful' );
 		} catch ( Exception $e ) {
 			$this->log( $e, 'ERROR' );
@@ -204,3 +212,6 @@ abstract class Deploy {
 // Registers all of our repos with the Deploy class
 foreach ( $repos as $name => $repo )
 	Deploy::register_repo( $name, $repo );
+
+if (isset($debug))
+	Deploy::$debug = $debug;
