@@ -200,7 +200,7 @@ abstract class Deploy {
 			if ( is_callable( $this->_post_deploy ) )
 				call_user_func( $this->_post_deploy );
 
-			if ( self::$debug )
+			if ( self::$log_debug === true )
 				$this->log( '[Debug: ' . json_encode($output) );
 
 			$this->log( '[SHA: ' . $this->_commit . '] Deployment of ' . $this->_name . ' from branch ' . $this->_branch . ' successful' );
@@ -214,4 +214,4 @@ foreach ( $repos as $name => $repo )
 	Deploy::register_repo( $name, $repo );
 
 if (isset($debug))
-	Deploy::$debug = $debug;
+	Deploy::$log_debug = $debug;
