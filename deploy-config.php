@@ -8,6 +8,7 @@
  * 		'branch' => 'the_desired_deploy_branch', // Required. Deployment branch.
  *		'remote' => 'git_remote_repo', // Optional. Defaults to 'origin'
  * 		'post_deploy' => 'callback' // Optional callback function for whatever.
+ * 		'private_key' => 'string' // Required. The validating key for the request. Should be passed with hook request as https://youserver.com/git-deploy/github.php?pkey=someweirdkey
  * )
  *
  * You can put as many of these together as you want, each one is simply 
@@ -30,7 +31,8 @@ $repos = array(
 	/*'examplerepo' => array(
 		'branch' => 'master',
 		'remote' => 'origin',
-		'path' => '/path/to/local/code/'
+		'path' => '/path/to/local/code/',
+		'private_key' => 'someweirdkey',
 	)*/
 );
 

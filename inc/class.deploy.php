@@ -64,13 +64,16 @@ abstract class Deploy {
 
 		if ( ! is_array( $repo ) )
 			return false;
-		
-		$required_keys = array( 'path', 'branch' );
+
+		$required_keys = array( 'path', 'branch', 'privatekey' );
 		foreach ( $required_keys as $key ) {
 			if ( ! array_key_exists( $key, $repo ) )
 				return false;
 		}
 
+		if ( $repo['private_key'] !== $_REQUEST['pkey'] )
+			return false;
+		
 		$defaults = array(
 			'remote'      => 'origin',
 			'post_deploy' => '',
