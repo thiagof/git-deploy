@@ -37,6 +37,7 @@ $repos = array(
 );
 
 $debug = true;
+$git_bin = '/usr/bin/git';
 
 /**
  * Sets the deploy log direcotry

@@ -41,6 +41,11 @@ abstract class Deploy {
 	public static $log_debug = false;
 
 	/**
+	* The git executable
+	*/
+	public static $git_bin = '/usr/bin/git';
+
+	/**
 	 * The path to where we wish to store our log file.
 	 */
 	private static $_log_path = DEPLOY_LOG_DIR;
@@ -218,3 +223,5 @@ foreach ( $repos as $name => $repo )
 
 if (isset($debug))
 	Deploy::$log_debug = $debug;
+if (isset($git_bin))
+	Deploy::$git_bin = $git_bin;
