@@ -186,22 +186,24 @@ abstract class Deploy {
 	*/
 	private function execute() {
 		try {
+			$git = self::$git_bin;
+
 			// Make sure we're in the right directory
-			if ( chdir( $this->_path) !== true ) throw new Exception("chdir to {$this->_path} failed");
+			if ( chdir( $this->_path) !== true ) throw new Exception("chdir failed");
 
 			// Discard any changes to tracked files since our last deploy
-			exec( 'git reset --hard HEAD 2>&1', $output );
+			exec( "$git reset --hard HEAD 2>&1", $output );
 
 			// Update the local repository
-			exec( 'git pull ' . $this->_remote . ' ' . $this->_branch .' 2>&1', $output );
+			exec( "$git pull " . $this->_remote . ' ' . $this->_branch .' 2>&1', $output );
 
 			// Secure the .git directory
 			echo exec( 'chmod -R og-rx .git' );
 
 			// Fetch submodules if any registred
 			if ( file_exists( '.gitmodules' ) ) {
-				exec( 'git submodule init 2>&1', $output );
-				exec( 'git submodule update 2>&1', $output );
+				exec( "$git submodule init 2>&1", $output );
+				exec( "$git submodule update 2>&1", $output );
 			}
 
 			// Post deploy action callback
