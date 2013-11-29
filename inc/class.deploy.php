@@ -211,7 +211,7 @@ abstract class Deploy {
 				call_user_func( $this->_post_deploy );
 
 			if ( self::$log_debug === true )
-				$this->log( '[Debug: ' . json_encode($output) );
+				$this->log( '[Debug: ' . implode("\n", $output) );
 
 			$this->log( '[SHA: ' . $this->_commit . '] Deployment of ' . $this->_name . ' from branch ' . $this->_branch . ' successful' );
 		} catch ( Exception $e ) {
