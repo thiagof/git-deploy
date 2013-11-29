@@ -70,7 +70,7 @@ abstract class Deploy {
 		if ( ! is_array( $repo ) )
 			return false;
 
-		$required_keys = array( 'path', 'branch', 'privatekey' );
+		$required_keys = array( 'path', 'branch', 'private_key' );
 		foreach ( $required_keys as $key ) {
 			if ( ! array_key_exists( $key, $repo ) )
 				return false;
