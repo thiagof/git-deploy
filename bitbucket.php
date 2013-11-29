@@ -22,10 +22,15 @@ class BitBucket_Deploy extends Deploy {
 	function __construct( $payload ) {
 		$payload = json_decode( stripslashes( $_POST['payload'] ), true );
 		$name = $payload['repository']['slug'];
-        $branch = $payload['commits'][0]['branch'];
 
-		$this->log( "$name $branch" );
-		if ( isset( parent::$repos[ $name ] ) && parent::$repos[ $name ]['branch'] === $branch ) {
+		//Define branches changed
+		$branches = array();
+		foreach ($payload['commits'] as $commit)
+			$branches[] = $commit['branch'];
+
+		if ( isset( parent::$repos[ $name ] ) && in_array(parent::$repos[$name]['branch'], $branches) {
+			$this->log( "Checking $name ". parent::$repos[$name]['branch'] );
+
 			$data = parent::$repos[ $name ];
 			$data['commit'] = $payload['commits'][0]['node'];
 			parent::__construct( $name, $data );
