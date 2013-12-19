@@ -20,20 +20,41 @@ class BitBucket_Deploy extends Deploy {
 	 * @param 	string 	$payload 	The JSON encoded payload data.
 	 */
 	function __construct( $payload ) {
+		//pushed data information
 		$payload = json_decode( stripslashes( $_POST['payload'] ), true );
-		$name = $payload['repository']['slug'];
+		//pushed repository name
+		$push_repo = $payload['repository']['slug'];
 
-		//Define branches changed
-		$branches = array();
+		//Define branches commited
+		$push_branches = array();
 		foreach ($payload['commits'] as $commit)
-			$branches[] = $commit['branch'];
+			$push_branches[] = $commit['branch'];
 
-		if ( isset( parent::$repos[ $name ] ) && in_array(parent::$repos[$name]['branch'], $branches) ) {
-			$this->log( "Checking $name ". parent::$repos[$name]['branch'] );
+		$this->log( "Pushed *$push_repo* on branches ". json_encode($push_branches) );
 
-			$data = parent::$repos[ $name ];
+		//Match config repositories with pushed repo commit
+		$repos = parent::$repos;
+		foreach ($repos as $repo_name => $repo_config) {
+			//allow config to have repo name in the index of array or in a value
+			//this allow user to configure on the deploy system more environments to the same repo (eg dev, stag, production)
+
+			if ($repo_name == $push_repo) {
+				$repo_this = $repos[$push_repo];
+				break;
+			}
+			if (isset( $repo_config['name'] ) && $repo_config['name'] == $push_repo) {
+				$repo_this = $repo_config;
+				break;
+			}
+		}
+
+		//Check if push is on a configured REPO_NAME and BRANCH
+		if ( ( isset($repo_this) ) && in_array($repo_this['branch'], $push_branches) ) {
+			$this->log( "Checking *$push_repo* branch *$repo_this[branch]*" );
+
+			$data = $repo_this;
 			$data['commit'] = $payload['commits'][0]['node'];
-			parent::__construct( $name, $data );
+			parent::__construct( $push_repo, $data );
 		}
 	}
 }

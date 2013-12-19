@@ -145,7 +145,7 @@ abstract class Deploy {
 
 		$this->_name = $name;
 
-		$available_options = array( 'branch', 'remote', 'commit', 'post_deploy' );
+		$available_options = array( 'name', 'branch', 'remote', 'commit', 'post_deploy' );
 
 		foreach ( $repo as $option => $value ){
 			if ( in_array( $option, $available_options ) ){
@@ -210,10 +210,11 @@ abstract class Deploy {
 			if ( is_callable( $this->_post_deploy ) )
 				call_user_func( $this->_post_deploy );
 
+			// Log debug information
 			if ( self::$log_debug === true )
-				$this->log( '[Debug: ' . implode("\n", $output) );
+				$this->log( '[Debug: ' . implode("\n\t", $output), 'DEBUG' );
 
-			$this->log( '[SHA: ' . $this->_commit . '] Deployment of ' . $this->_name . ' from branch ' . $this->_branch . ' successful' );
+			$this->log( '[SHA: ' . $this->_commit . '] Deployment of ' . $this->_name . ' from branch ' . $this->_branch . ' complete' );
 		} catch ( Exception $e ) {
 			$this->log( $e, 'ERROR' );
 		}
