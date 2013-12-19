@@ -4,6 +4,7 @@
  *
  * Each repos will be an entry in the array in the following way:
  * 'repo name' => array( // Required. This is the repo name
+ * 		'name' 	 => 'repo_slug' // Optional. The repository slug. Allow use of repo branches on the same deploy env
  * 		'path' 	 => '/path/to/local/repo/' // Required. The local path to your code.
  * 		'branch' => 'the_desired_deploy_branch', // Required. Deployment branch.
  *		'remote' => 'git_remote_repo', // Optional. Defaults to 'origin'
@@ -28,12 +29,22 @@
  * other configuration you may need to do for the newly deployed code.
  */
 $repos = array(
-	/*'examplerepo' => array(
-		'branch' => 'master',
+	/*
+	'myrepo-dev' => array(
+		'name' => 'myrepo',
+		'branch' => 'develop',
 		'remote' => 'origin',
 		'path' => '/path/to/local/code/',
 		'private_key' => 'someweirdkey',
-	)*/
+	),
+	'myrepo-pro' => array(
+		'name' => 'myrepo',
+		'branch' => 'master',
+		'remote' => 'origin',
+		'path' => '/path/to/production/code/',
+		'private_key' => 'someweirdkey2',
+	)
+	*/
 );
 
 $debug = true;
