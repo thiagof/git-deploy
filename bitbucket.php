@@ -27,8 +27,10 @@ class BitBucket_Deploy extends Deploy {
 
 		//Define branches commited
 		$push_branches = array();
-		foreach ($payload['commits'] as $commit)
-			$push_branches[] = $commit['branch'];
+		foreach ($payload['commits'] as $commit) {
+			if ($commit['branch'])
+				$push_branches[] = $commit['branch'];
+		}
 
 		$this->log( "Pushed *$push_repo* on branches ". json_encode($push_branches) );
 
@@ -55,6 +57,8 @@ class BitBucket_Deploy extends Deploy {
 			$data = $repo_this;
 			$data['commit'] = $payload['commits'][0]['node'];
 			parent::__construct( $push_repo, $data );
+		} else {
+			$this->log( "Repository and branch not match: ". json_encode($repo_this) );
 		}
 	}
 }
