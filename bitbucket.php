@@ -58,7 +58,7 @@ class BitBucket_Deploy extends Deploy {
 			$data['commit'] = $payload['commits'][0]['node'];
 			parent::__construct( $push_repo, $data );
 		} else {
-			$this->log( "Repository and branch not match: ". json_encode($repo_this) );
+			$this->log( "Repository or branch did not match: ". json_encode($repos) );
 		}
 	}
 }
