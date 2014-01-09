@@ -76,8 +76,10 @@ abstract class Deploy {
 				return false;
 		}
 
-		if ( $repo['private_key'] !== $_REQUEST['pkey'] )
+		if ( $repo['private_key'] !== $_REQUEST['pkey'] ) {
+			$this->log( 'Private key not match ($repo[private_key] !== $_REQUEST[pkey])', 'DEBUG' );
 			return false;
+		}
 		
 		$defaults = array(
 			'remote'      => 'origin',
@@ -163,6 +165,11 @@ abstract class Deploy {
 	 * @param 	string 	$type 		The type of log message (e.g. INFO, DEBUG, ERROR, etc.)
 	 */
 	protected function log( $message, $type = 'INFO' ) {
+		$type = strtoupper($type);
+
+		if ( $type == 'DEBUG' && self::$log_debug !== true )
+			return false;
+
 		if ( self::$_log_name ) {
 			// Set the name of the log file
 			$filename = self::$_log_path . '/' . rtrim( self::$_log_name, '/' );
@@ -211,9 +218,8 @@ abstract class Deploy {
 				call_user_func( $this->_post_deploy );
 
 			// Log debug information
-			if ( self::$log_debug === true )
-				$this->log( '[Debug: ' . implode("\n\t", $output), 'DEBUG' );
-
+			$this->log( '[Debug: ' . implode("\n\t", $output), 'DEBUG' );
+			// Log commit information
 			$this->log( '[SHA: ' . $this->_commit . '] Deployment of ' . $this->_name . ' from branch ' . $this->_branch . ' complete' );
 		} catch ( Exception $e ) {
 			$this->log( $e, 'ERROR' );

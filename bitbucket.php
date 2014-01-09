@@ -27,37 +27,50 @@ class BitBucket_Deploy extends Deploy {
 
 		//Define branches commited
 		$push_branches = array();
-		foreach ($payload['commits'] as $commit) {
+		foreach ($payload['commits'] as $commit)
+		{
 			if ($commit['branch'])
 				$push_branches[] = $commit['branch'];
 		}
 
 		$this->log( "Bitbucket pushed *$push_repo* on branches ". json_encode($push_branches) );
 
-		//Match config repositories with pushed repo commit
+		//Find the repositories which matches the pushed repo commit
+		//  checks if push is on a configured REPO_NAME and BRANCH
 		$repos = parent::$repos;
-		foreach ($repos as $repo_name => $repo_config) {
+		$repo_this = array();
+		foreach ($repos as $name => $repo)
+		{
 			//allow config to have repo name in the index of array or in a value
 			//this allow user to configure on the deploy system more environments to the same repo (eg dev, stag, production)
 
-			if ($repo_name == $push_repo) {
-				$repo_this = $repos[$push_repo];
-				break;
+			//Repo configured as key name
+			if ($name == $push_repo) {
+				$repo_this[] = $config;
 			}
-			if (isset( $repo_config['name'] ) && $repo_config['name'] == $push_repo) {
-				$repo_this = $repo_config;
-				break;
+			//Or configured with 'name' config
+			elseif (
+				isset( $config['name'] )
+				&& $config['name'] == $push_repo
+				&& in_array($config['branch'], $push_branches)
+			) {
+				$repo_this[] = $config;
 			}
 		}
 
-		//Check if push is on a configured REPO_NAME and BRANCH
-		if ( ( isset($repo_this) ) && in_array($repo_this['branch'], $push_branches) ) {
-			$this->log( "Checking *$push_repo* branch *$repo_this[branch]*" );
+		//Loop found repos and pull them
+		if ( isset($repo_this) )
+		{
+			foreach ($repo_this as $repo) {
+				$this->log( "Checking *$push_repo* branch *$repo[branch]*" );
 
-			$data = $repo_this;
-			$data['commit'] = $payload['commits'][0]['node'];
-			parent::__construct( $push_repo, $data );
-		} else {
+				$repo['commit'] = $payload['commits'][0]['node'];
+
+				parent::__construct( $push_repo, $repo );
+			}
+		}
+		else
+		{
 			$this->log( "Repository or branch did not match: ". json_encode($repo_this) );
 		}
 	}
