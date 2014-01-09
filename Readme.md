@@ -1,5 +1,7 @@
 ###Install
 
+Prepare the ssh-agent
+
     # Generate a SSH public key
     ssh-keygen -t rsa -C "your_email@example.com" -f ~/.ssh/bitbucket
     ssh-add ~/.ssh/bitbucket
@@ -11,21 +13,28 @@
       HostName bitbucket.org
       IdentityFile ~/.ssh/bitbucket
 
+Start your project repository
+
     # Use the identity to initially load the repository
     git clone git@bitbucket-deploy/myself/projrepo.git
 
     # Checkout the repository to your desired branch
     cd projrepo
     git checkout develop
+    git branch --set-upstream develop origin/develop
 
+    # Init your modules
+    git submodule init
+    git submodule update
 
-    # Set the git-deploy app online
+Setup the git-deploy app
+
+    # Clone the app
     git clone 
 
     # Configure your deployment project in git-deploy
     cd git-deploy
     nano deploy-config.php
-
 
 Finally configure Bitbucket or Github to access the deploy tool
 
@@ -35,6 +44,16 @@ Finally configure Bitbucket or Github to access the deploy tool
 The deployment hook URI should be something like the above
     
     http://mywebsite.com/git-deploy/bitbucket.php?pkey=mysecret
+
+
+And with this setup your project pushs will automatically get into your project website!
+
+
+Ah, remember to allways configure your git account in the development env
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
 
 
 ###Todo
