@@ -77,7 +77,7 @@ abstract class Deploy {
 		}
 
 		if ( $repo['private_key'] !== $_REQUEST['pkey'] ) {
-			$this->log( 'Private key not match ($repo[private_key] !== $_REQUEST[pkey])', 'DEBUG' );
+			self::log( 'Private key not match ($repo[private_key] !== $_REQUEST[pkey])', 'ERROR' );
 			return false;
 		}
 		
