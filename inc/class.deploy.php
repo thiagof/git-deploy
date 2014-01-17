@@ -219,6 +219,8 @@ abstract class Deploy {
 
 			// Log debug information
 			$this->log( '[Debug: ' . implode("\n\t", $output), 'DEBUG' );
+			$this->log( '[Debug: ' . json_encode($_REQUEST), 'DEBUG' );
+			
 			// Log commit information
 			$this->log( '[SHA: ' . $this->_commit . '] Deployment of ' . $this->_name . ' from branch ' . $this->_branch . ' complete' );
 		} catch ( Exception $e ) {
