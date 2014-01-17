@@ -164,7 +164,7 @@ abstract class Deploy {
 	 * @param 	string 	$message 	The message to write
 	 * @param 	string 	$type 		The type of log message (e.g. INFO, DEBUG, ERROR, etc.)
 	 */
-	protected function log( $message, $type = 'INFO' ) {
+	public static function log( $message, $type = 'INFO' ) {
 		$type = strtoupper($type);
 
 		if ( $type == 'DEBUG' && self::$log_debug !== true )
@@ -219,8 +219,7 @@ abstract class Deploy {
 
 			// Log debug information
 			$this->log( '[Debug: ' . implode("\n\t", $output), 'DEBUG' );
-			$this->log( '[Debug: ' . json_encode($_REQUEST), 'DEBUG' );
-			
+
 			// Log commit information
 			$this->log( '[SHA: ' . $this->_commit . '] Deployment of ' . $this->_name . ' from branch ' . $this->_branch . ' complete' );
 		} catch ( Exception $e ) {
