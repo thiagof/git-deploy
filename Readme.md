@@ -61,3 +61,4 @@ Ah, remember to allways configure your git account in the development env
 - Review github wrapper to replicate the new features added to the bitbucket wrapper
 - Allow multiple $repos to be match - same repo on different locations
 - Better handling of pull success (track problems)
+- Refactor git-deploy front php and class
