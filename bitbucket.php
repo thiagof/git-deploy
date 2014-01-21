@@ -11,7 +11,7 @@ define( 'ACTIVE_DEPLOY_ENDPOINT', true );
 require_once 'deploy-config.php';
 
 //Log post information (only debug mode)
-$this->log( '[Debug: ' . json_encode($_REQUEST), 'DEBUG' );
+Deploy::log( '[Debug: ' . json_encode($_REQUEST), 'DEBUG' );
 
 /**
  * Deploys BitBucket git repos
