@@ -1,4 +1,7 @@
 <?php
+# Data for testing porposes
+//include 'data.sample.php';
+
 // Make sure we have a payload, stop if we do not.
 if( ! isset( $_POST['payload'] ) )
 	die( '<h1>No payload present</h1><p>A BitBucket POST payload is required to deploy from this script.</p>' );
@@ -50,20 +53,20 @@ class BitBucket_Deploy extends Deploy {
 
 			//Repo configured as key name
 			if ($name == $push_repo) {
-				$repo_this[] = $config;
+				$repo_this[] = $repo;
 			}
 			//Or configured with 'name' config
 			elseif (
-				isset( $config['name'] )
-				&& $config['name'] == $push_repo
-				&& in_array($config['branch'], $push_branches)
+				isset( $repo['name'] )
+				&& $repo['name'] == $push_repo
+				&& in_array($repo['branch'], $push_branches)
 			) {
-				$repo_this[] = $config;
+				$repo_this[] = $repo;
 			}
 		}
 
 		//Loop found repos and pull them
-		if ( isset($repo_this) )
+		if ( isset($repo_this) || ! count($repo_this[0]) > 0 )
 		{
 			foreach ($repo_this as $repo) {
 				$this->log( "Checking *$push_repo* branch *$repo[branch]*" );
