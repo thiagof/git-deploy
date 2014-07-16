@@ -192,12 +192,11 @@ abstract class Deploy {
 	* Executes the necessary commands to deploy the code.
 	*/
 	private function execute() {
-		try {
-			$git = self::$git_bin;
-
+		try
+		{
 			// Git to work on the repo directory
-			putenv("GIT_DIR={$this->_path}/.git");
-			putenv("GIT_WORK_TREE={$this->_path}");
+			$env = "GIT_DIR={$this->_path}/.git GIT_WORK_TREE={$this->_path}";
+			$git = "$env {self::$git_bin}";
 
 			// Discard any changes to tracked files since our last deploy
 			exec( "$git reset --hard HEAD 2>&1", $output );
@@ -225,7 +224,9 @@ abstract class Deploy {
 
 			// Log commit information
 			$this->log( '[SHA: ' . $this->_commit . '] Deployment of ' . $this->_name . ' from branch ' . $this->_branch . ' complete' );
-		} catch ( Exception $e ) {
+		}
+		catch ( Exception $e )
+		{
 			$this->log( $e, 'ERROR' );
 		}
 	}
