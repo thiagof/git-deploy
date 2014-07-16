@@ -195,8 +195,9 @@ abstract class Deploy {
 		try {
 			$git = self::$git_bin;
 
-			// Make sure we're in the right directory
-			if ( chdir( $this->_path) !== true ) throw new Exception("chdir failed");
+			// Git to work on the repo directory
+			putenv("GIT_DIR={$this->_path}/.git");
+			putenv("GIT_WORK_TREE={$this->_path}");
 
 			// Discard any changes to tracked files since our last deploy
 			exec( "$git reset --hard HEAD 2>&1", $output );
@@ -210,6 +211,8 @@ abstract class Deploy {
 			// Fetch submodules if any registred
 			if ( file_exists( '.gitmodules' ) ) {
 				exec( "$git submodule init 2>&1", $output );
+				exec( "$git submodule sync 2>&1", $output );
+				exec( "$git submodule foreach git fetch --tags 2>&1", $output );
 				exec( "$git submodule update 2>&1", $output );
 			}
 
