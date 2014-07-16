@@ -197,6 +197,8 @@ abstract class Deploy {
 			// Git to work on the repo directory
 			$git = self::$git_bin . " --git-dir={$this->_path}/.git --work-tree={$this->_path}";
 
+			$this->log( "[Debug: git call is: $git" , 'DEBUG' );
+
 			// Discard any changes to tracked files since our last deploy
 			exec( "$git reset --hard HEAD 2>&1", $output );
 
