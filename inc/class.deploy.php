@@ -195,14 +195,13 @@ abstract class Deploy {
 		try
 		{
 			// Git to work on the repo directory
-			$env = "GIT_DIR={$this->_path}/.git GIT_WORK_TREE={$this->_path}";
-			$git = "$env ". self::$git_bin;
+			$git = self::$git_bin . " --git-dir={$this->_path}/.git --work-tree={$this->_path}";
 
 			// Discard any changes to tracked files since our last deploy
 			exec( "$git reset --hard HEAD 2>&1", $output );
 
 			// Update the local repository
-			exec( "$git pull " . $this->_remote . ' ' . $this->_branch .' 2>&1', $output );
+			exec( "$git pull {$this->_remote} {$this->_branch} 2>&1", $output );
 
 			// Secure the .git directory
 			echo exec( "chmod -R og-rx {$this->_path}/.git" );
