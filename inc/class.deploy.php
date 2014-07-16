@@ -205,10 +205,10 @@ abstract class Deploy {
 			exec( "$git pull " . $this->_remote . ' ' . $this->_branch .' 2>&1', $output );
 
 			// Secure the .git directory
-			echo exec( 'chmod -R og-rx .git' );
+			echo exec( "chmod -R og-rx {$this->_path}/.git" );
 
 			// Fetch submodules if any registred
-			if ( file_exists( '.gitmodules' ) ) {
+			if ( file_exists( '{$this->_path}/.gitmodules' ) ) {
 				exec( "$git submodule init 2>&1", $output );
 				exec( "$git submodule sync 2>&1", $output );
 				exec( "$git submodule foreach git fetch --tags 2>&1", $output );
@@ -217,7 +217,7 @@ abstract class Deploy {
 
 			// Post deploy action callback
 			if ( is_callable( $this->_post_deploy ) )
-				call_user_func( $this->_post_deploy );
+				call_user_func( $this->_post_deploy, $this );
 
 			// Log debug information
 			$this->log( '[Debug: ' . implode("\n\t", $output), 'DEBUG' );
