@@ -1,6 +1,6 @@
 ###Install
 
-Prepare the ssh-agent
+**Prepare the ssh-agent with a credential**
 
     # Generate a SSH public key
     ssh-keygen -t rsa -C "your_email@example.com" -f ~/.ssh/bitbucket
@@ -13,7 +13,17 @@ Prepare the ssh-agent
       HostName bitbucket.org
       IdentityFile ~/.ssh/bitbucket
 
-Start your project repository
+Also check your server git user configuration
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+**Configure git host to accept your certificates**
+
+- Git Hub: https://help.github.com/articles/generating-ssh-keys#step-3-add-your-ssh-key-to-github
+- Bitbucket (step 6): https://confluence.atlassian.com/pages/viewpage.action?pageId=270827678
+
+**Init your project repository in the server**
 
     # Use the identity to initially load the repository
     git clone git@bitbucket-deploy/myself/projrepo.git
@@ -27,19 +37,16 @@ Start your project repository
     git submodule init
     git submodule update
 
-Setup the git-deploy app
+**Setup the git-deploy app**
 
     # Clone the app
-    git clone 
+    git clone https://github.com/thiagof/git-deploy
 
     # Configure your deployment project in git-deploy
     cd git-deploy
     nano deploy-config.php
 
-Finally configure Bitbucket or Github to access the deploy tool
-
-- Git Hub: https://help.github.com/articles/generating-ssh-keys#step-3-add-your-ssh-key-to-github
-- Bitbucket (step 6): https://confluence.atlassian.com/pages/viewpage.action?pageId=270827678
+**Configure Bitbucket or Github to hook into the deploy tool**
 
 The deployment hook URI should be something like the above
     
@@ -49,12 +56,15 @@ The deployment hook URI should be something like the above
 And with this setup your project pushs will automatically get into your project website!
 
 
-Ah, remember to allways configure your git account in the development env
+**Multiple projects on single git-deploy instance**
 
-    git config --global user.name "Your Name"
-    git config --global user.email you@example.com
+You need to configure the `$git_bin` variable in deploy-config.
 
+    $git_bin = 'sudo /usr/bin/git';
 
+This would allow your httpd user to pull changes on any folder, from another projects and sites for example. The trick is to configure sudoers file
+
+    httpd_user    ALL = NOPASSWD: /usr/bin/git
 
 ###Todo
 
