@@ -143,7 +143,7 @@ abstract class Deploy {
 	 * @param 	array 	$repo 	The repository info. See class block for docs.
 	 */
 	protected function __construct( $name, $repo ) {
-		$this->_path = realpath( $repo['path'] ) . DIRECTORY_SEPARATOR;
+		$this->_path = $repo['path'];
 
 		$this->_name = $name;
 
