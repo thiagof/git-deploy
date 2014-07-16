@@ -196,7 +196,7 @@ abstract class Deploy {
 		{
 			// Git to work on the repo directory
 			$env = "GIT_DIR={$this->_path}/.git GIT_WORK_TREE={$this->_path}";
-			$git = "$env {self::$git_bin}";
+			$git = "$env ". self::$git_bin;
 
 			// Discard any changes to tracked files since our last deploy
 			exec( "$git reset --hard HEAD 2>&1", $output );
@@ -208,7 +208,7 @@ abstract class Deploy {
 			echo exec( "chmod -R og-rx {$this->_path}/.git" );
 
 			// Fetch submodules if any registred
-			if ( file_exists( '{$this->_path}/.gitmodules' ) ) {
+			if ( file_exists( "{$this->_path}/.gitmodules" ) ) {
 				exec( "$git submodule init 2>&1", $output );
 				exec( "$git submodule sync 2>&1", $output );
 				exec( "$git submodule foreach git fetch --tags 2>&1", $output );
