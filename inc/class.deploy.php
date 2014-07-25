@@ -209,12 +209,10 @@ abstract class Deploy {
 			echo exec( "chmod -R og-rx {$this->_path}/.git" );
 
 			// Fetch submodules if any registred
-			if ( file_exists( "{$this->_path}/.gitmodules" ) ) {
-				exec( "$git submodule init 2>&1", $output );
-				exec( "$git submodule sync 2>&1", $output );
-				exec( "$git submodule foreach git fetch --tags 2>&1", $output );
-				exec( "$git submodule update 2>&1", $output );
-			}
+			exec( "$git submodule init 2>&1", $output );
+			exec( "$git submodule sync 2>&1", $output );
+			exec( "$git submodule foreach git fetch --tags 2>&1", $output );
+			exec( "$git submodule update 2>&1", $output );
 
 			// Post deploy action callback
 			if ( is_callable( $this->_post_deploy ) )
